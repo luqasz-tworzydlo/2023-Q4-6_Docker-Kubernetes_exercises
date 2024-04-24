@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  mysql:
+    # image: mysql:latest
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: example_root_password
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress_user
+      MYSQL_PASSWORD: wordpress_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    # networks:
+    #   - app-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    environment:
+      PMA_HOST: mysql
+      # PMA_USER: root
+      PMA_USER: wordpress_user
+      # PMA_PASSWORD: example_root_password
+      PMA_PASSWORD: wordpress_password
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+    # networks:
+    #   - app-network
+
+  wordpress:
+    image: wordpress:latest
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_USER: wordpress_user
+      WORDPRESS_DB_PASSWORD: wordpress_password
+      WORDPRESS_DB_NAME: wordpress
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+    volumes:
+      - ./wordpress_data:/var/www/html
+    # networks:
+    #   - app-network
+
+# networks:
+#   app-network:
+#    driver: bridge
+
+volumes:
+  mysql_data:
+  wordpress_data:
+
