@@ -1,0 +1,106 @@
+-----------------------------------------------------------------------------------------------
+::::::INSTALACJA DOCKERA NA UBUNTU::::::
+-----------------------------------------------------------------------------------------------
+sudo apt-get update
+
+sudo apt-get install ca-certificates curl gnupg
+
+sudo install -m 0755 -d /etc/apt/keyrings
+
+sudo apt-get install curl
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+(Opcjonalnie postawienie pierwszego kontenera)
+sudo docker run hello-world 
+----------------------------------------------------------------------------------------------
+::::::PODSTAWOWE POLECENIA DOCKER::::::
+----------------------------------------------------------------------------------------------
+
+// Polecenie pokazuje wszystko co jest związane z dockerem
+docker 
+
+// Polecenie pokazuje obrazy systemu
+docker images
+
+// Pokazuje wersje dockera
+docker version
+
+// Pokazuje informacje o maszynnie wirtualnej
+docker info
+
+// Pokazuje wszystkie aktywne kontenery
+docker ps
+
+// Pokazuje wszystkie kontenery - wliczajac kontenery offline
+docker ps -a
+
+// Pokazuje wszystkie uruchomione kontenery
+docker container ls
+
+// Pokazuje wszystkie kontenery - wliczając kontenery offline
+docker container ls -a
+
+----------------------------------------------------------------------------------------------
+::::::PODSTAWOWE POLECENIA DOCKER-COMPOSE:::::
+----------------------------------------------------------------------------------------------
+docker-compose up
+Uruchamia usługi zdefiniowane w pliku docker-compose.yml.
+Wykonuje operacje w kolejności: buduje obrazy (jeśli nie istnieją), tworzy kontenery, sieci i woluminy, a następnie uruchamia usługi w odpowiednich kontenerach.
+Wszystkie logi kontenerów są wypisywane na konsolę w czasie rzeczywistym.
+
+docker-compose up -d
+Działa tak samo jak docker-compose up, ale opcja -d (detached) uruchamia kontenery w tle, więc nie widzimy ich logów na bieżąco w konsoli. Aby zobaczyć logi, możemy użyć innych komend.
+
+docker-compose stop
+Zatrzymuje uruchomione usługi bez ich usuwania. Kontenery, sieci i woluminy pozostają nienaruszone.
+Jest to przydatne, jeśli chcesz zatrzymać usługi na chwilę, a potem je wznowić, nie tracąc żadnych danych.
+
+docker-compose ps
+Wyświetla status kontenerów związanych z usługami zdefiniowanymi w pliku docker-compose.yml.
+Możemy zobaczyć, które kontenery są uruchomione, jakie porty są eksponowane i inne przydatne informacje.
+
+docker-compose logs
+Wyświetla zapisane logi dla usług zdefiniowanych w pliku docker-compose.yml.
+Daje możliwość śledzenia, co dzieje się w kontenerach po ich uruchomieniu, zwłaszcza gdy są uruchomione w trybie "detached".
+
+docker-compose down
+Zatrzymuje i usuwa wszystkie kontenery, sieci i woluminy związane z usługami zdefiniowanymi 
+w pliku docker-compose.yml.
+Używanie tej komendy sprawi, że wszystko zostanie wyczyszczone, a jeśli chcesz ponownie uruchomić usługi, będziesz musiał zacząć od nowa.
+
+docker exec:
+To jest główna komenda, która mówi systemowi Docker, aby wykonać pewne polecenie wewnątrz określonego kontenera.
+
+-it
+To są dwa przełączniki używane razem.
+
+-i 
+Trzyma otwarte standardowe wejście (STDIN), co jest przydatne, jeśli chcemy interaktywnie wprowadzać komendy.
+
+-t 
+Alokuje terminal wirtualny, który umożliwia bardziej "ludzką" interakcję z kontenerem, coś w stylu konsoli.
+
+sh
+To jest polecenie, które chcesz uruchomić wewnątrz kontenera. W tym przypadku uruchamiasz powłokę sh (Bourne shell). Dzięki temu możesz wprowadzać polecenia wewnątrz kontenera tak, jakbyś był zalogowany do niego.
+
+W praktyce, używanie docker exec -it <ID_kontenera> sh jest często stosowanym sposobem na "wchodzenie" do kontenera i pracę w jego wnętrzu.
+
+
+
+
+
+
+
+
